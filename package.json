@@ -1,0 +1,27 @@
+{
+  "name": "geekbot",
+  "version": "1.0.0",
+  "description": "GeekSpeak Assistant",
+  "main": "geekbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttfkam/geekbot.git"
+  },
+  "keywords": [
+    "Slack",
+    "GeekSpeak",
+    "bot"
+  ],
+  "author": "Miles Elam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ttfkam/geekbot/issues"
+  },
+  "homepage": "https://github.com/ttfkam/geekbot#readme",
+  "dependencies": {
+    "@slack/client": "^3.5.4"
+  }
+}
