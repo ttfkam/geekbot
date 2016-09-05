@@ -11,8 +11,8 @@ class Bot {
     this.slack = new RtmClient(opts.token, {
       logLevel: 'error',
       dataStore: new MemoryDataStore(),
-      autoReconnect: opt.autoReconnect || true,
-      autoMark: opt.autoMark || true
+      autoReconnect: opts.autoReconnect || true,
+      autoMark: opts.autoMark || true
     });
     
     this.keywords = new Map();
