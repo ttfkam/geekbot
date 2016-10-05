@@ -36,9 +36,11 @@ class Bot {
           user = dataStore.getUserById(message.user);
       
       for (let regex of this.keywords.keys()) {
-        if (regex.test(message.text)) {
+        let match = message.text.match(regex);
+        if (match) {
           let callback = this.keywords.get(regex);
-          callback(message, channel, user);
+          match.shift();
+          callback(message, channel, user, ...match);
         }
       }
     });
@@ -46,14 +48,8 @@ class Bot {
     this.slack.start();
   }
   
-  respondTo(keywords, callback, start) {
-    if (start) {
-      keywords = '^' + keywords;
-    }
-    
-    let regex = new RegExp(keywords, 'i');
-    
-    this.keywords.set(regex, callback);
+  respondTo(keyword_regex, callback) {    
+    this.keywords.set(keyword_regex, callback);
   }
   
   send(message, channel, cb) {

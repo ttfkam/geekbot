@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/ttfkam/geekbot#readme",
   "dependencies": {
-    "@slack/client": "^3.5.4"
+    "@slack/client": "^3.5.4",
+    "lodash": "^4.16.3"
   }
 }
