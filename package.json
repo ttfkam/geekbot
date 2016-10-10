@@ -23,6 +23,8 @@
   "homepage": "https://github.com/ttfkam/geekbot#readme",
   "dependencies": {
     "@slack/client": "^3.5.4",
+    "google-auth-library": "^0.9.8",
+    "googleapis": "^14.0.0",
     "lodash": "^4.16.3"
   }
 }
