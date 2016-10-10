@@ -14,14 +14,14 @@ bot.respondTo(/^hello/i, (message, channel, user) => {
 });
 
 // Roll D&D-style
-bot.respondTo(/^roll (\d*)d(\d+)/i, (message, channel, user, numDice, maxVal) => {
+bot.respondTo(/roll (\d*)d(\d+)/i, (message, channel, user, numDice, maxVal) => {
   let result = _.sum(_.times((numDice || 1) >> 0, () => _.random(1, maxVal >> 0)))
-  bot.send(`${user.name} roles ${result}`, channel);
+  bot.send(`${user.name} rolls ${result}`, channel);
 });
 
 // Pick a number between x and y
-bot.respondTo(/^random (\d+)-(\d+)/i, (message, channel, user, min, max) => {
-  bot.send(`${user.name} gets ${_random(min >> 0,max >> 0)}`, channel);
+bot.respondTo(/random (\d+)-(\d+)/i, (message, channel, user, min, max) => {
+  bot.send(`${user.name} gets ${_.random(min >> 0,max >> 0)}`, channel);
 });
 
 // Show who's coming to the show
