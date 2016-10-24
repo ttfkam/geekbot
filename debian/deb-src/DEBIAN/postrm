@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -u
+set -e
+
+NAME     = "geekbot"
+PREFIX   = "/var/lib"
+PROG_DIR = "$PREFIX/$NAME"
+
+case "$1" in
+  purge)
+    rm -rf "/etc/default/$NAME"
+    ;;
+  
+  upgrade|remove|failed-upgrade|abort-install|abort-upgrade|disappear)
+    ;;
+  
+  *)
+    echo "postrm called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+if [ -d /run/systemd/system ]; then
+  systemctl --system daemon-reload >/dev/null || true
+fi
+
+if [ -x "/usr/bin/deb-systemd-helper" ]; then
+  if [ "$1" = "remove" ]; then
+    deb-systemd-helper mask "$NAME.service" >/dev/null
+  fi
+
+  if [ "$1" = "purge" ]; then
+    deb-systemd-helper purge "$NAME.service" >/dev/null
+    deb-systemd-helper unmask "$NAME.service" >/dev/null
+  fi
+fi
+
+rm -rf "$PROG_DIR"
+
+exit 0

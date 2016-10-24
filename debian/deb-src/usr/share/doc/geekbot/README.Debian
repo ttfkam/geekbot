@@ -1,0 +1,5 @@
+Geekbot for Slack
+
+Requires /etc/default/geekbot to run and for it to contain a valid Slack bot token.
+
+See: https://api.slack.com/bot-users

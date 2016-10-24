@@ -1,0 +1,16 @@
+Package: geekbot
+Section: unknown
+Priority: extra
+Maintainer: Miles Elam <miles@geekspeak.org>
+Homepage: https://github.com/ttfkam/geekbot
+Architecture: all
+Installed-Size: SIZE
+Depends: nodejs (>=6.0.0), sync-git
+Version: VERSION
+Description: Bot for GeekSpeak's Slack channel
+  In order to start, the file /etc/default/geekbot must be created and have a
+  valid authentication token specified in the variable SLACK_TOKEN, e.g.,
+  .
+  SLACK_TOKEN=b6786btgUYBGUYG67gyigyub
+  .
+  See: https://api.slack.com/bot-users

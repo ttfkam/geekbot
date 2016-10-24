@@ -1,0 +1,19 @@
+[Unit]
+Description=Job that run the geekbot for Slack
+Documentation=man:geekbot(1)
+
+[Service]
+EnvironmentFile=/etc/default/geekbot
+ExecStart=/usr/bin/node /var/lib/geekbot
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=geekbot
+User=nobody
+Group=nobody
+Nice=10
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

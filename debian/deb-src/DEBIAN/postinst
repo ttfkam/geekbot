@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -u
+set -e
+
+NAME     = "geekbot"
+GIT_URL  = "https://github.com/ttfkam/geekbot.git"
+PREFIX   = "/var/lib"
+PROG_DIR = "$PREFIX/$NAME"
+
+case "$1" in
+  configure)
+    /usr/bin/git clone "$GIT_URL" "$PROG_DIR"
+    /usr/bin/npm update "$PROG_DIR"
+    ;;
+    
+  abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+  
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-helper unmask "$NAME.service" >/dev/null || true
+
+if deb-systemd-helper --quiet was-enabled "$NAME.service"; then
+  deb-systemd-helper enable "$NAME.service" >/dev/null || true
+else
+  deb-systemd-helper update-state "$NAME.service" >/dev/null || true
+fi
+    
+exit 0

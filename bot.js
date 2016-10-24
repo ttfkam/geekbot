@@ -31,6 +31,8 @@ class Bot {
         return;
       }
       
+      console.log(message);
+      
       let dataStore = this.slack.dataStore,
           channel = dataStore.getChannelGroupOrDMById(message.channel),
           user = dataStore.getUserById(message.user);
@@ -54,6 +56,39 @@ class Bot {
   
   send(message, channel, cb) {
     this.slack.sendMessage(message, channel.id, () => cb && cb());
+  }
+  
+  sendDirect(message, user, cb) {
+    if (user && user.is_bot) {
+      return;
+    }
+    let dm = this.slack.dataStore.getDMByName(user.name);
+    this.slack.sendMessage(message, dm.id, () => cb && cb());
+  }
+  
+  getChannel(name) {
+    return this.slack.dataStore.getChannelByName(name);
+  }
+  
+  getUser(userInfo) {
+    let ds = this.slack.dataStore;
+    return ds.getUserByName(userInfo) || ds.getUserByEmail(userInfo);
+  }
+  
+  getUserById(user) {
+    return this.slack.dataStore.getUserBuId(user);
+  }
+  
+  debug(propPath, channel) {
+    this.send("Debugging...", channel);
+    let val = propPath ? propPath.split(".").reduce((obj, prop) => (obj || {})[prop], this.slack)
+                       : this.slack;
+//    let props = [];
+//    for (prop in this.slack) {
+//      props.push(prop);
+//    }
+    this.send("Keys: " + Object.keys(val || {}), channel);
+    this.send("Value: " + val, channel);
   }
 }
 

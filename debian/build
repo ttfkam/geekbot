@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# IMPORTANT 
+# Protect agaisnt mispelling a var and rm -rf /
+set -u
+set -e
+
+VERSION = "1.0.0-1"
+SRC     = "/tmp/geekbot-deb-src"
+SYSROOT = "$SRC/root"
+DEBIAN  = "$SRC/DEBIAN"
+
+rm -rf "$SRC"
+rsync -a deb-src/ "$SRC/"
+
+find "$SRC/" -type d -exec chmod 0755 {} \;
+find "$SRC/" -type f -exec chmod go-w {} \;
+find "$SRC/" -type f ! -regex '\./DEBIAN.*' -printf '%P ' | xargs md5sum > "$SRC/DEBIAN/md5sums"
+chown -R root:root "$SRC/"
+
+SIZE = `du -s --exclude=DEBIAN "$SRC" | sed s'/\s\+.*//'`+8
+sed s"/SIZE/$SIZE/" -i "$SRC/DEBIAN/control"
+sed s"/VERSION/$VERSION/" -i "$SRC/DEBIAN/control"
+
+find "$SRC/" -type d -exec chmod 0755 {} \;
+find "$SRC/" -type f -exec chmod go-w {} \;
+chown -R root:root "$SRC/"
+
+dpkg -b "$SRC" "geekbot-$VERSION_all.deb"

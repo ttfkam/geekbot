@@ -7,7 +7,9 @@ const Bot = require('./bot'),
         autoReconnect: true,
         autoMark: true
       }),
-      _ = require('lodash');
+      MAX_RAND = 1000000;
+
+let storiesChannel;
 
 bot.respondTo(/^hello/i, (message, channel, user) => {
   bot.send(`Hello to you too, ${user.name}!`, channel);
@@ -15,13 +17,29 @@ bot.respondTo(/^hello/i, (message, channel, user) => {
 
 // Roll D&D-style
 bot.respondTo(/roll (\d*)d(\d+)/i, (message, channel, user, numDice, maxVal) => {
-  let result = _.sum(_.times((numDice || 1) >> 0, () => _.random(1, maxVal >> 0)))
+  let result = 0;
+  numDice = (numDice || 1) >> 0;
+  maxVal >>= 0;
+  if (maxVal > MAX_RAND || numDice > MAX_RAND) {
+    bot.send(`C'mon, ${user.name}! Ain't nobody got time for that!`, channel);
+    return;
+  }
+  for (let i = 0; i < numDice; ++i) {
+    result += Math.ceil(Math.random * maxVal);
+  }
   bot.send(`${user.name} rolls ${result}`, channel);
 });
 
 // Pick a number between x and y
 bot.respondTo(/random (\d+)-(\d+)/i, (message, channel, user, min, max) => {
-  bot.send(`${user.name} gets ${_.random(min >> 0,max >> 0)}`, channel);
+  min >>= 0;
+  max >>= 0;
+  let diff = Math.max(min, max) - Math.min(min, max);
+  if (min > MAX_RAND || max > MAX_RAND) {
+    bot.send(`Did @greg put you up to this, ${user}? It's not funny.`);
+    return;
+  }
+  bot.send(`${user.name} gets ${Math.floor(Math.random() * diff) + Math.min(min, max)}`, channel);
 });
 
 // Show who's coming to the show
@@ -60,6 +78,19 @@ bot.respondTo(/^(?:where|when)(?:'re| are) we recording/i,
                 });
     bot.send(`We're recording at ${event.location} on ${time}`, channel);
   });
+});
+
+bot.respondTo(/\b(https?:\/\/.+)$/, (message, channel, user, url) => {
+  let stories = storiesChannel || (storiesChannel = bot.getChannel("stories"));
+  // if (channel === stories) {
+    console.log("Loading " + url);
+    // bot.sendDirect("Loading " + url, bot.getUser("miles"));
+    // Get URL info
+  // }
+});
+
+bot.respondTo(/^debug(?: (\S+))?/i, (message, channel, user, propPath) => {
+  bot.debug(propPath, channel);
 });
 
 // Someone asked a question
