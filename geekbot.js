@@ -64,7 +64,7 @@ bot.respondTo(/^who(?:'s| (?:all )?is) coming/i,
         lagging = event.attendees.filter(e => e.responseStatus === "needsAction"
                                           || e.responseStatus === "tentative")
                                  .map(e => (e.displayName || e.email).match(/^\w+/)[0]);
-    bot.send(`For the recording at ${event.location} at ${time}:`, channel);
+    bot.send(`For the recording at ${event.location} on ${time}:`, channel);
     bot.send(confirmed.join(', ') + " so far.", channel);
     bot.send("Haven't heard back yet from " + lagging.join(', '), channel);
   });
@@ -79,7 +79,7 @@ bot.respondTo(/^(?:where|when)(?:'re| are) we recording/i,
       return;
     }  
     let time = (new Date(event.originalStartTime.dateTime)).toLocaleString("en-US", TS_FORMAT);
-    bot.send(`We're recording at ${event.location} at ${time}`, channel);
+    bot.send(`We're recording at ${event.location} on ${time}`, channel);
   });
 });
 
