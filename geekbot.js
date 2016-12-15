@@ -9,6 +9,7 @@ const Bot = require('./bot'),
       }),
       TS_FORMAT = {  // Format: 2016-10-24T17:30:00-07:00
         timeZoneName: 'short',
+        timeZone: 'America/Los_Angeles',
         hour12: true,
         weekday: 'long',
         hour: 'numeric',
