@@ -25,7 +25,7 @@ bot.respondTo(/roll (\d*)d(\d+)/i, (message, channel, user, numDice, maxVal) => 
     return;
   }
   for (let i = 0; i < numDice; ++i) {
-    result += Math.ceil(Math.random * maxVal);
+    result += Math.ceil(Math.random() * maxVal);
   }
   bot.send(`${user.name} rolls ${result}`, channel);
 });
