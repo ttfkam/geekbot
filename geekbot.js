@@ -32,14 +32,14 @@ bot.respondTo(/roll (\d*)d(\d+)/i, (message, channel, user, numDice, maxVal) => 
 
 // Pick a number between x and y
 bot.respondTo(/random (\d+)-(\d+)/i, (message, channel, user, min, max) => {
-  min >>= 0;
-  max >>= 0;
-  let diff = Math.max(min, max) - Math.min(min, max);
-  if (min > MAX_RAND || max > MAX_RAND) {
-    bot.send(`Did @greg put you up to this, ${user}? It's not funny.`);
-    return;
+  let tmp = min|0;
+  min = Math.min(tmp,max|0);
+  max = Math.max(tmp,max|0);
+  let diff = max - min;
+  if (min < -MAX_RAND || max > MAX_RAND) {
+    throw { message: "Values are too large" };
   }
-  bot.send(`${user.name} gets ${Math.floor(Math.random() * diff) + Math.min(min, max)}`, channel);
+  bot.send(`${user.name} gets ${Math.floor(Math.random() * diff) + min}`, channel);
 });
 
 // Show who's coming to the show

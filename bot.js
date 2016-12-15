@@ -31,8 +31,6 @@ class Bot {
         return;
       }
       
-      console.log(message);
-      
       let dataStore = this.slack.dataStore,
           channel = dataStore.getChannelGroupOrDMById(message.channel),
           user = dataStore.getUserById(message.user);
@@ -83,10 +81,6 @@ class Bot {
     this.send("Debugging...", channel);
     let val = propPath ? propPath.split(".").reduce((obj, prop) => (obj || {})[prop], this.slack)
                        : this.slack;
-//    let props = [];
-//    for (prop in this.slack) {
-//      props.push(prop);
-//    }
     this.send("Keys: " + Object.keys(val || {}), channel);
     this.send("Value: " + val, channel);
   }
