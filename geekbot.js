@@ -7,6 +7,13 @@ const Bot = require('./bot'),
         autoReconnect: true,
         autoMark: true
       }),
+      TS_FORMAT = {  // Format: 2016-10-24T17:30:00-07:00
+        timeZoneName: 'short',
+        hour12: true,
+        weekday: 'long',
+        hour: 'numeric',
+        minute: 'numeric'
+      },
       MAX_RAND = 1000000;
 
 let storiesChannel;
@@ -50,11 +57,13 @@ bot.respondTo(/^who(?:'s| (?:all )?is) coming/i,
       bot.send("Wups! Can't see the Google calendar!", channel);
       return;
     }  
-    let confirmed = event.attendees.filter(e => e.responseStatus === "accepted")
+    let time = (new Date(event.originalStartTime.dateTime)).toLocaleString("en-US", TS_FORMAT),
+        confirmed = event.attendees.filter(e => e.responseStatus === "accepted")
                                    .map(e => (e.displayName || e.email).match(/^\w+/)[0]),
         lagging = event.attendees.filter(e => e.responseStatus === "needsAction"
                                           || e.responseStatus === "tentative")
                                  .map(e => (e.displayName || e.email).match(/^\w+/)[0]);
+    bot.send(`For the recording at ${event.location} at ${time}:`, channel);
     bot.send(confirmed.join(', ') + " so far.", channel);
     bot.send("Haven't heard back yet from " + lagging.join(', '), channel);
   });
@@ -68,15 +77,8 @@ bot.respondTo(/^(?:where|when)(?:'re| are) we recording/i,
       bot.send("Wups! Can't see the Google calendar!", channel);
       return;
     }  
-        // Format: 2016-10-24T17:30:00-07:00
-    let time = (new Date(event.originalStartTime.dateTime)).toLocaleString("en-US", {
-                  timeZoneName: 'short',
-                  hour12: true,
-                  weekday: 'long',
-                  hour: 'numeric',
-                  minute: 'numeric'
-                });
-    bot.send(`We're recording at ${event.location} on ${time}`, channel);
+    let time = (new Date(event.originalStartTime.dateTime)).toLocaleString("en-US", TS_FORMAT);
+    bot.send(`We're recording at ${event.location} at ${time}`, channel);
   });
 });
 
